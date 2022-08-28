@@ -7,7 +7,6 @@ const compatibility = {
 
 function handleNavigationTiming() {
     if (compatibility.getEntriesByType) {
-        setTimeout(() => {
             const perfEntries: any = performance.getEntriesByType("navigation");
 
             const { fetchStart, connectStart, connectEnd, requestStart, responseStart, responseEnd, domInteractive, domComplete, redirectEnd, secureConnectionStart, redirectStart, domContentLoadedEventStart, domContentLoadedEventEnd, loadEventStart, domainLookupEnd, domainLookupStart } = perfEntries[0] || performance.timing;
@@ -25,28 +24,18 @@ function handleNavigationTiming() {
             const timeToInteractive: number = domInteractive - fetchStart; // 首次可交互耗时
             const completeLoadTime: number = loadEventStart - fetchStart; // 完整的加载耗时
             const FP: number = responseEnd - fetchStart; // 白屏时间
-
             const memory: any = (performance as any).memory;
-            const memoryUsage: string = ((memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100).toFixed(2) + "%"; // js内存使用占比
+            const memoryUsage: string = ((memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100).toFixed(2); // js内存使用占比
+            setTimeout(function (){
+                const logData = {
+                    name: "pagePerformance",
+                    DNSTime:DNSTime,
+                    connectTime:connectTime,
+                    memoryUsage:memoryUsage
+                }
+                reportTracker(logData);
+            },3000)
 
-            const logData = {
-                name: "pagePerformance",
-                URL: window.location.href,
-                DNSTime,
-                connectTime,
-                ttfbTime,
-                responseTime,
-                parseDOMTime,
-                domContentLoadedTime,
-                timeToInteractive,
-                completeLoadTime,
-                FP,
-                memoryUsage,
-            };
-
-            console.log("performanceIndex", logData);
-            reportTracker(logData);
-        }, 3000);
     }
 }
 

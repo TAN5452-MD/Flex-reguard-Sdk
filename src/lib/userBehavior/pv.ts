@@ -1,4 +1,5 @@
 import { UserBehavior } from "../../type/index";
+import reportTracker from "../../utils/reportTracker";
 
 //keyof 获取的是类型
 export const createHistoryEvent = <T extends keyof History>(type: T) => {
@@ -25,13 +26,17 @@ export const createHistoryEvent = <T extends keyof History>(type: T) => {
 // targetKey自定义 例如 history-pv
 export function captureEvents<T extends UserBehavior>(mouseEventList: string[], targetKey: string, data?: T) {
     mouseEventList.forEach((item) => {
-        window.addEventListener(item, () => {
-            console.log("监听到了");
+        window.addEventListener(item, (e) => {
             if (data) {
                 data.stayTime = new Date().getTime() - data.startTime;
                 data.startTime = new Date().getTime();
             }
-            console.log(data);
+            const reportData = {
+                name:'PV',
+                stayTime:data.stayTime,
+                time:new Date().getTime()
+            }
+            reportTracker(reportData)
         });
     });
 }

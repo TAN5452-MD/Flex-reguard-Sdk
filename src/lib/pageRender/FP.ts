@@ -11,10 +11,15 @@ export default function FPTracker(FCP?: boolean) {
                 };
                 reportTracker(reportData);
             }
-            if (FCP) {
+            if (FCP===true) {
                 if (entry.name === "first-contentful-paint") {
                     observer.disconnect();
                     console.log("FCPtime", entry.startTime);
+                    let reportData = {
+                        name: "FCP",
+                        FCPtime: entry.startTime,
+                    };
+                    reportTracker(reportData);
                 }
             }
         }

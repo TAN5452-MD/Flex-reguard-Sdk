@@ -25,7 +25,7 @@ export default [
         input: "./src/core/index.ts",
         output: [
             {
-                file: path.resolve(__dirname, "/dist/index.d.js"),
+                file: path.resolve(__dirname, "dist/index.d.js"),
                 format: "es",
             },
         ],
